@@ -1,0 +1,37 @@
+<h1>Posts#index</h1>
+
+--------------------------------------------------  
+<div> Cached Part with Fragment Caching </div>
+--------------------------------------------------  
+<br>
+<% cache('post_categories', expires_in: 2.minutes) do %>
+    All available category:
+    <%# binding.pry %>
+    <% @categories.each do |c| %>
+
+      <div><%= c.name %></div>
+    <% end %>
+<% end %>
+
+
+<br>
+<br>
+--------------------------------------------------  
+<div> Posts with Russian Doll caching: </div>
+--------------------------------------------------  
+<br>
+<% @posts.each do |post| %>
+  <% cache(post) do %>
+    <%= post.title %>
+    <br>
+  <% end %>
+<% end %>
+
+
+<br>
+<br>
+--------------------------------------------------  
+<div> Posts with Shared partial caching: </div>
+-------------------------------------------------- 
+<br>
+<%= render partial: 'post', collection: @posts, cached: true, cache_key: 'partial_test' %>
